@@ -1,0 +1,81 @@
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="24dp"
+    app:cardCornerRadius="0dp"
+    app:cardElevation="2dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/imgArticulo"
+            android:layout_width="match_parent"
+            android:layout_height="220dp"
+            android:scaleType="centerCrop"
+            android:src="@android:drawable/ic_menu_gallery" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/tvTitulo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="The Chronos Legacy 1964"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/auct_navy" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp">
+
+                <TextView
+                    android:id="@+id/labelBid"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="CURRENT BID"
+                    android:textSize="10sp"
+                    android:textColor="@color/auct_gray_text" />
+
+                <TextView
+                    android:id="@+id/tvMonto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/labelBid"
+                    android:text="$42,500"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/auct_navy" />
+
+                <TextView
+                    android:id="@+id/tvTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_below="@id/labelBid"
+                    android:text="02h 45m 12s"
+                    android:textColor="#E91E63"
+                    android:textStyle="bold" />
+            </RelativeLayout>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:text="PLACE BID"
+                android:backgroundTint="@color/auct_gold"
+                android:textColor="@color/auct_navy"
+                android:layout_marginTop="16dp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

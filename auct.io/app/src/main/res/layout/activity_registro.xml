@@ -1,0 +1,67 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/auct_bg_light">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SECURE ACCESS"
+            android:textColor="@color/auct_navy"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.05" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Enter the Digital Gallery."
+            android:textColor="@color/auct_gray_text"
+            android:textSize="16sp"
+            android:layout_marginTop="4dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="32dp"
+            android:gravity="center">
+            <TextView android:layout_width="30dp" android:layout_height="30dp" android:text="1" android:background="@color/auct_navy" android:textColor="#FFF" android:gravity="center" android:textStyle="bold"/>
+            <View android:layout_width="40dp" android:layout_height="1dp" android:background="#DDD"/>
+            <TextView android:layout_width="30dp" android:layout_height="30dp" android:text="2" android:background="#EEE" android:gravity="center"/>
+            <View android:layout_width="40dp" android:layout_height="1dp" android:background="#DDD"/>
+            <TextView android:layout_width="30dp" android:layout_height="30dp" android:text="3" android:background="#EEE" android:gravity="center"/>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="IDENTITY VALIDATION (KYC)"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:layout_marginTop="32dp"
+            android:textColor="@color/auct_navy"/>
+
+        <EditText android:id="@+id/etDocumento" android:layout_width="match_parent" android:layout_height="55dp" android:hint="DNI / Passport Number" android:inputType="number" android:layout_marginTop="16dp" android:background="@android:drawable/editbox_background" android:padding="12dp"/>
+        <EditText android:id="@+id/etNombre" android:layout_width="match_parent" android:layout_height="55dp" android:hint="First Name" android:layout_marginTop="12dp" android:background="@android:drawable/editbox_background" android:padding="12dp"/>
+        <EditText android:id="@+id/etApellido" android:layout_width="match_parent" android:layout_height="55dp" android:hint="Last Name" android:layout_marginTop="12dp" android:background="@android:drawable/editbox_background" android:padding="12dp"/>
+        <EditText android:id="@+id/etDireccion" android:layout_width="match_parent" android:layout_height="55dp" android:hint="Legal Address" android:layout_marginTop="12dp" android:background="@android:drawable/editbox_background" android:padding="12dp"/>
+
+        <Button
+            android:id="@+id/btnRegistrar"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:text="INITIALIZE ACCOUNT"
+            android:backgroundTint="@color/auct_navy"
+            android:textColor="#FFFFFF"
+            android:layout_marginTop="40dp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+</ScrollView>

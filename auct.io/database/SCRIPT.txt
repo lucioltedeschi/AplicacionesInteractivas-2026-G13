@@ -1,0 +1,260 @@
+CREATE DATABASE auction;
+
+-- 1. Countries
+CREATE TABLE Countries (
+    numero INT NOT NULL,
+    nombre VARCHAR(250) NOT NULL,
+    nombreCorto VARCHAR(250) NULL,
+    capital VARCHAR(250) NOT NULL,
+    nacionalidad VARCHAR(250) NOT NULL,
+    idiomas VARCHAR(150) NOT NULL,
+    CONSTRAINT pk_countries PRIMARY KEY (numero)
+)
+GO
+
+-- 2. Users (Ex-Personas)
+CREATE TABLE Users (
+    identificador INT NOT NULL IDENTITY,
+    documento VARCHAR(20) NOT NULL,
+    nombre VARCHAR(150) NOT NULL,
+    apellido VARCHAR(150) NOT NULL,
+    direccion VARCHAR(250),
+    estado VARCHAR(15) CONSTRAINT chkEstado CHECK (estado IN ('activo', 'inactivo')),
+    foto VARBINARY(MAX),
+    fotoDniFrente VARBINARY(MAX),
+    fotoDniDorso VARBINARY(MAX),
+    clave VARCHAR(250),
+    CONSTRAINT pk_users PRIMARY KEY (identificador)
+)
+GO
+
+-- 3. Employees
+CREATE TABLE Employees (
+    identificador INT NOT NULL,
+    cargo VARCHAR(100),
+    sector INT NULL,
+    CONSTRAINT pk_employees PRIMARY KEY (identificador),
+    CONSTRAINT fk_employees_users FOREIGN KEY (identificador) REFERENCES Users(identificador)
+)
+GO
+
+-- 4. Sectors
+CREATE TABLE Sectors (
+    identificador INT NOT NULL IDENTITY,
+    nombreSector VARCHAR(150) NOT NULL,
+    codigoSector VARCHAR(10) NULL,
+    responsableSector INT NULL,
+    CONSTRAINT pk_sectors PRIMARY KEY (identificador),
+    CONSTRAINT fk_sectors_employees FOREIGN KEY (responsableSector) REFERENCES Employees(identificador)
+)
+GO
+
+-- 5. Clients
+CREATE TABLE Clients (
+    identificador INT NOT NULL,
+    numeroPais INT,
+    admitido VARCHAR(2) CONSTRAINT chkAdmitido CHECK(admitido IN ('si','no')),
+    categoria VARCHAR(10) CONSTRAINT chkCategoria CHECK (categoria IN ('comun', 'especial', 'plata', 'oro', 'platino')),
+    verificador INT NULL,
+    CONSTRAINT pk_clients PRIMARY KEY (identificador),
+    CONSTRAINT fk_clients_users FOREIGN KEY (identificador) REFERENCES Users(identificador),
+    CONSTRAINT fk_clients_employees FOREIGN KEY (verificador) REFERENCES Employees (identificador),
+    CONSTRAINT fk_clients_countries FOREIGN KEY (numeroPais) REFERENCES Countries (numero)
+)
+GO
+
+-- 6. Owners (Duenios)
+CREATE TABLE Owners (
+    identificador INT NOT NULL,
+    numeroPais INT,
+    verificacionFinanciera VARCHAR(2) CONSTRAINT chkVF CHECK(verificacionFinanciera IN ('si','no')),
+    verificacionJudicial VARCHAR(2) CONSTRAINT chkVJ CHECK(verificacionJudicial IN ('si','no')),
+    calificacionRiesgo INT CONSTRAINT chkCR CHECK(calificacionRiesgo IN (1,2,3,4,5,6)),
+    verificador INT NULL,
+    CONSTRAINT pk_owners PRIMARY KEY (identificador),
+    CONSTRAINT fk_owners_users FOREIGN KEY (identificador) REFERENCES Users(identificador),
+    CONSTRAINT fk_owners_employees FOREIGN KEY (verificador) REFERENCES Employees (identificador)
+)
+GO
+
+-- 7. PaymentMethods
+CREATE TABLE PaymentMethods (
+    identificador INT NOT NULL IDENTITY,
+    cliente INT NOT NULL,
+    tipo VARCHAR(50) CONSTRAINT chkTipoMP CHECK (tipo IN ('cuenta_bancaria', 'tarjeta_credito', 'cheque_certificado')),
+    entidad VARCHAR(150),
+    numeroReferencia VARCHAR(150),
+    esExtranjera VARCHAR(2) CONSTRAINT chkExt CHECK(esExtranjera IN ('si','no')),
+    verificado VARCHAR(2) CONSTRAINT chkMPVer CHECK(verificado IN ('si','no')) DEFAULT 'no',
+    montoCheque DECIMAL(18,2) NULL,
+    CONSTRAINT pk_paymentMethods PRIMARY KEY (identificador),
+    CONSTRAINT fk_paymentMethods_clients FOREIGN KEY (cliente) REFERENCES Clients(identificador)
+)
+GO
+
+-- 8. OwnerBankAccounts
+CREATE TABLE OwnerBankAccounts (
+    identificador INT NOT NULL IDENTITY,
+    duenio INT NOT NULL,
+    banco VARCHAR(150) NOT NULL,
+    numeroCuenta VARCHAR(150) NOT NULL,
+    esExterior VARCHAR(2) CONSTRAINT chkCuentaExt CHECK (esExterior IN ('si','no')),
+    CONSTRAINT pk_ownerBankAccounts PRIMARY KEY (identificador),
+    CONSTRAINT fk_ownerBankAccounts_owners FOREIGN KEY (duenio) REFERENCES Owners(identificador)
+)
+GO
+
+-- 9. Insurances
+CREATE TABLE Insurances (
+    nroPoliza VARCHAR(30) NOT NULL,
+    duenio INT NOT NULL,
+    compania VARCHAR(150) NOT NULL,
+    polizaCombinada VARCHAR(2) CONSTRAINT chkpolizaCombinada CHECK(polizaCombinada IN ('si','no')),
+    importe DECIMAL(18,2) NOT NULL CONSTRAINT chkImporte CHECK (importe > 0),
+    CONSTRAINT pk_insurances PRIMARY KEY (nroPoliza),
+    CONSTRAINT fk_insurances_owners FOREIGN KEY (duenio) REFERENCES Owners(identificador)
+)
+GO
+
+-- 10. Auctioneers (Subastadores)
+CREATE TABLE Auctioneers (
+    identificador INT NOT NULL,
+    matricula VARCHAR(15),
+    region VARCHAR(50),
+    CONSTRAINT pk_auctioneers PRIMARY KEY (identificador),
+    CONSTRAINT fk_auctioneers_users FOREIGN KEY (identificador) REFERENCES Users(identificador)
+)
+GO
+
+-- 11. Auctions
+CREATE TABLE Auctions (
+    identificador INT NOT NULL IDENTITY,
+    fecha DATE CONSTRAINT chkFecha CHECK (fecha > DATEADD(dd, 10, GETDATE())),
+    hora TIME NOT NULL,
+    estado VARCHAR(10) CONSTRAINT chkES CHECK (estado IN ('abierta','cerrada')),
+    subastador INT NULL,
+    ubicacion VARCHAR(350) NULL,
+    capacidadAsistentes INT NULL,
+    tieneDeposito VARCHAR(2) CONSTRAINT chkTD CHECK(tieneDeposito IN ('si','no')),
+    seguridadPropia VARCHAR(2) CONSTRAINT chkSP CHECK(seguridadPropia IN ('si','no')),
+    categoria VARCHAR(10) CONSTRAINT chkCS CHECK (categoria IN ('comun', 'especial', 'plata', 'oro', 'platino')),
+    moneda VARCHAR(10) CONSTRAINT chkMoneda CHECK (moneda IN ('pesos', 'dolares')) DEFAULT 'pesos',
+    CONSTRAINT pk_auctions PRIMARY KEY (identificador),
+    CONSTRAINT fk_auctions_auctioneers FOREIGN KEY (subastador) REFERENCES Auctioneers(identificador)
+)
+GO
+
+-- 12. Products
+CREATE TABLE Products (
+    identificador INT NOT NULL IDENTITY,
+    fecha DATE,
+    disponible VARCHAR(2) CONSTRAINT chkD CHECK (disponible IN ('si','no')),
+    descripcionCatalogo VARCHAR(500) NULL DEFAULT 'No Posee',
+    descripcionCompleta VARCHAR(300) NOT NULL,
+    historia VARCHAR(MAX) NULL,
+    declaracionPropiedad VARCHAR(2) CONSTRAINT chkDecProp CHECK (declaracionPropiedad IN ('si','no')),
+    origenLicito VARCHAR(2) CONSTRAINT chkOrigLic CHECK (origenLicito IN ('si','no')),
+    estadoAprobacion VARCHAR(15) CONSTRAINT chkEstAprob CHECK (estadoAprobacion IN ('pendiente', 'aceptado', 'rechazado')) DEFAULT 'pendiente',
+    motivoRechazo VARCHAR(500) NULL,
+    revisor INT NULL,
+    duenio INT NOT NULL,
+    seguro VARCHAR(30) NULL,
+    CONSTRAINT pk_products PRIMARY KEY (identificador),
+    CONSTRAINT fk_products_employees FOREIGN KEY (revisor) REFERENCES Employees(identificador),
+    CONSTRAINT fk_products_owners FOREIGN KEY (duenio) REFERENCES Owners(identificador),
+    CONSTRAINT fk_products_insurances FOREIGN KEY (seguro) REFERENCES Insurances(nroPoliza)
+)
+GO
+
+-- 13. Photos
+CREATE TABLE Photos (
+    identificador INT NOT NULL IDENTITY,
+    producto INT NOT NULL,
+    foto VARBINARY (MAX) NOT NULL,
+    CONSTRAINT pk_photos PRIMARY KEY (identificador),
+    CONSTRAINT fk_photos_products FOREIGN KEY (producto) REFERENCES Products(identificador)
+)
+GO
+
+-- 14. Catalogs
+CREATE TABLE Catalogs (
+    identificador INT NOT NULL IDENTITY,
+    descripcion VARCHAR(250) NOT NULL,
+    subasta INT NULL,
+    responsable INT NOT NULL,
+    CONSTRAINT pk_catalogs PRIMARY KEY (identificador),
+    CONSTRAINT fk_catalogs_employees FOREIGN KEY (responsable) REFERENCES Employees(identificador),
+    CONSTRAINT fk_catalogs_auctions FOREIGN KEY (subasta) REFERENCES Auctions(identificador)
+)
+GO
+
+-- 15. CatalogItems
+CREATE TABLE CatalogItems (
+    identificador INT NOT NULL IDENTITY,
+    catalogo INT NOT NULL,
+    producto INT NOT NULL,
+    precioBase DECIMAL(18,2) NOT NULL CONSTRAINT chkPB CHECK (precioBase > 0.01),
+    comision DECIMAL(18,2) NOT NULL CONSTRAINT chkC CHECK (comision > 0.01),
+    subastado VARCHAR(2) CONSTRAINT chkS CHECK (subastado IN ('si','no')),
+    CONSTRAINT pk_catalogItems PRIMARY KEY (identificador),
+    CONSTRAINT fk_catalogItems_catalogs FOREIGN KEY (catalogo) REFERENCES Catalogs(identificador),
+    CONSTRAINT fk_catalogItems_products FOREIGN KEY (producto) REFERENCES Products(identificador)
+)
+GO
+
+-- 16. Attendees (Asistentes)
+CREATE TABLE Attendees (
+    identificador INT NOT NULL IDENTITY,
+    numeroPostor INT NOT NULL,
+    cliente INT NOT NULL,
+    subasta INT NOT NULL,
+    CONSTRAINT pk_attendees PRIMARY KEY (identificador),
+    CONSTRAINT fk_attendees_clients FOREIGN KEY (cliente) REFERENCES Clients(identificador),
+    CONSTRAINT fk_attendees_auctions FOREIGN KEY (subasta) REFERENCES Auctions(identificador)
+)
+GO
+
+-- 17. Bids (Pujos/Pujas)
+CREATE TABLE Bids (
+    identificador INT NOT NULL IDENTITY,
+    asistente INT NOT NULL,
+    item INT NOT NULL,
+    importe DECIMAL(18,2) NOT NULL CONSTRAINT chkI CHECK (importe > 0.01),
+    fechaHora DATETIME NOT NULL DEFAULT GETDATE(),
+    ganador VARCHAR(2) CONSTRAINT chkG CHECK (ganador IN ('si','no')) DEFAULT 'no',
+    CONSTRAINT pk_bids PRIMARY KEY (identificador),
+    CONSTRAINT fk_bids_attendees FOREIGN KEY (asistente) REFERENCES Attendees(identificador),
+    CONSTRAINT fk_bids_catalogItems FOREIGN KEY (item) REFERENCES CatalogItems(identificador)
+)
+GO
+
+-- 18. AuctionRecords
+CREATE TABLE AuctionRecords (
+    identificador INT NOT NULL IDENTITY,
+    subasta INT NOT NULL,
+    duenio INT NOT NULL,
+    producto INT NOT NULL,
+    cliente INT NOT NULL,
+    importe DECIMAL(18,2) NOT NULL CONSTRAINT chkImportePagado CHECK (importe > 0.01),
+    comision DECIMAL(18,2) NOT NULL CONSTRAINT chkComisionPagada CHECK (comision > 0.01),
+    CONSTRAINT pk_auctionRecords PRIMARY KEY (identificador),
+    CONSTRAINT fk_auctionRecords_auctions FOREIGN KEY (subasta) REFERENCES Auctions(identificador),
+    CONSTRAINT fk_auctionRecords_owners FOREIGN KEY (duenio) REFERENCES Owners(identificador),
+    CONSTRAINT fk_auctionRecords_products FOREIGN KEY (producto) REFERENCES Products(identificador),
+    CONSTRAINT fk_auctionRecords_clients FOREIGN KEY (cliente) REFERENCES Clients(identificador)
+)
+GO
+
+-- 19. Fines (Multas)
+CREATE TABLE Fines (
+    identificador INT NOT NULL IDENTITY,
+    cliente INT NOT NULL,
+    subasta INT NOT NULL,
+    monto DECIMAL(18,2) NOT NULL,
+    pagada VARCHAR(2) CONSTRAINT chkMultaPag CHECK (pagada IN ('si','no')) DEFAULT 'no',
+    fechaGeneracion DATETIME NOT NULL DEFAULT GETDATE(),
+    CONSTRAINT pk_fines PRIMARY KEY (identificador),
+    CONSTRAINT fk_fines_clients FOREIGN KEY (cliente) REFERENCES Clients(identificador),
+    CONSTRAINT fk_fines_auctions FOREIGN KEY (subasta) REFERENCES Auctions(identificador)
+)
+GO

@@ -1,0 +1,230 @@
+openapi: 3.0.0
+
+info:
+  title: API Subastas - AUCT.IO
+  description: API REST para la gestión de usuarios (KYC) y participación en subastas.
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:3000
+    description: Servidor Local (Node.js)
+
+tags:
+  - name: Autenticación
+    description: Gestión del alta de usuarios (postores)
+  - name: Subastas
+    description: Consulta y participación en subastas activas
+  - name: Pujas
+    description: Operaciones de oferta sobre los lotes
+  - name: Consignación
+    description: Solicitudes para subastar artículos propios
+
+paths:
+
+  /auth/registro/paso1:
+    post:
+      tags: [Autenticación]
+      summary: Etapa 1 - Alta de usuario
+      description: |
+        Primer paso del registro. El usuario envía sus datos personales. 
+        Queda en estado "activo" en la tabla `Users`.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [documento, nombre, apellido, direccion]
+              properties:
+                documento:
+                  type: string
+                  example: "35123456"
+                nombre:
+                  type: string
+                  example: "Monica"
+                apellido:
+                  type: string
+                  example: "Perez"
+                direccion:
+                  type: string
+                  example: "Av. Cabildo 1234, CABA"
+      responses:
+        '201':
+          description: Registro exitoso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message: { type: string, example: "Registro  exitoso." }
+        '400':
+          description: Error en los datos enviados o documento duplicado
+
+  /auth/registro/paso2:
+    post:
+      tags: [Autenticación]
+      summary: Etapa 2 - Generación de Clave
+      description: Se asigna la contraseña al usuario creado en el Paso 1, utilizando su documento.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [documento, clave]
+              properties:
+                documento:
+                  type: integer
+                  example: 12345678
+                clave:
+                  type: string
+                  format: password
+                  example: "Clave123!"
+      responses:
+        '200':
+          description: Clave generada exitosamente
+        '404':
+          description: Usuario no encontrado
+        '500':
+          description: Error interno del servidor
+
+  /usuarios:
+    get:
+      tags: [Autenticación]
+      summary: Listar todos los usuarios
+      description: Devuelve todos los usuarios registrados en el sistema.
+      responses:
+        '200':
+          description: Lista de usuarios obtenida
+        '500':
+          description: Error interno del servidor
+
+  /usuarios/{id}/perfil:
+    get:
+      tags: [Autenticación]
+      summary: Obtener perfil del usuario
+      description: Retorna los datos básicos del perfil (nombre, apellido, estado).
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Perfil obtenido
+        '404':
+          description: Usuario no encontrado
+        '500':
+          description: Error interno del servidor
+
+  /subastas:
+    get:
+      tags: [Subastas]
+      summary: Listar todas las subastas
+      description: Devuelve el listado completo de subastas registradas en la tabla `Auctions`.
+      responses:
+        '200':
+          description: Lista de subastas obtenida
+        '500':
+          description: Error interno del servidor
+
+  /subastas/{id}/items:
+    get:
+      tags: [Subastas]
+      summary: Catálogo de una subasta específica
+      description: Retorna los ítems (lotes) asociados a una subasta, con su descripción y precio base.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Lista de ítems obtenida
+        '500':
+          description: Error interno del servidor
+
+  /subastas/{id}/pujas:
+    get:
+      tags: [Pujas]
+      summary: Historial de pujas de una subasta
+      description: Lista todas las pujas realizadas en los lotes de una subasta específica.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Historial de pujas obtenido
+        '500':
+          description: Error interno del servidor
+
+  /pujas:
+    post:
+      tags: [Pujas]
+      summary: Realizar una nueva puja
+      description: |
+        Registra una nueva puja para un ítem del catálogo.
+        **Validaciones de Negocio:**
+        - Debe ser al menos +1% del precio base sobre la mayor oferta actual.
+        - No puede superar el +20% del precio base sobre la mayor oferta.
+        - Para subastas 'oro' o 'platino', solo debe superar la oferta actual.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [asistenteId, itemId, importe]
+              properties:
+                asistenteId:
+                  type: integer
+                  example: 5
+                itemId:
+                  type: integer
+                  example: 102
+                importe:
+                  type: number
+                  format: float
+                  example: 15500.50
+      responses:
+        '201':
+          description: Puja aceptada y registrada
+        '400':
+          description: Error de validación (fuera de rango)
+        '404':
+          description: Ítem no encontrado
+        '500':
+          description: Error interno del servidor
+
+  /productos/consignar:
+    post:
+      tags: [Consignación]
+      summary: Solicitar consignación de artículo
+      description: Crea un registro en la tabla `Products` con estado 'pendiente'.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [duenioId, descripcion]
+              properties:
+                duenioId:
+                  type: integer
+                  example: 1
+                descripcion:
+                  type: string
+                  example: "Reloj Rolex Cosmograph Daytona"
+      responses:
+        '202':
+          description: Solicitud de consignación en revisión
+        '500':
+          description: Error interno del servidor

@@ -1,0 +1,8 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="Base.Theme.Clase4" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">#0A2647</item>
+        <item name="colorSecondary">#C5A059</item>
+    </style>
+
+    <style name="Theme.Clase4" parent="Base.Theme.Clase4" />
+</resources>

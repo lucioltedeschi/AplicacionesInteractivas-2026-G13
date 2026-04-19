@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="auct_navy">#001220</color>
+    <color name="auct_gold">#C5A059</color>
+    <color name="auct_gray_text">#666666</color>
+    <color name="auct_bg_light">#F8F8F8</color>
+</resources>
