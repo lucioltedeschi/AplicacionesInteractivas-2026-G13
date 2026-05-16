@@ -9,15 +9,55 @@
         android:icon="@mipmap/ic_launcher"
         android:label="Auct.io"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-        android:usesCleartextTraffic="true"> <activity android:name=".SplashActivity" android:exported="true">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-    </activity>
+        android:usesCleartextTraffic="true">
 
-        <activity android:name=".RegistroActivity" />
-        <activity android:name=".SubastasActivity" />
+        <activity
+            android:name=".SplashActivity"
+            android:exported="true">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
+
+        <activity
+            android:name=".LoginActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".HomeActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".AuctionDetailActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".BidActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".PaymentMethodsActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ProductRequestActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".HistoryActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ProfileActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".NotificationsActivity"
+            android:exported="false" />
 
     </application>
+
 </manifest>

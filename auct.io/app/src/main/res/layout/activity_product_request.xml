@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F4F7FB"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            android:id="@+id/txtTituloSolicitud"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Solicitar subasta de artículo"
+            android:textColor="#0F172A"
+            android:textSize="26sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txtDescripcionSolicitud"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Cargá los datos del bien que querés proponer para una futura subasta."
+            android:textColor="#475569"
+            android:textSize="16sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:background="#FFFFFF"
+            android:elevation="4dp"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Datos del artículo"
+                android:textColor="#0F172A"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/edtDescripcionCatalogo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:background="#F8FAFC"
+                android:hint="Título corto para catálogo"
+                android:padding="14dp" />
+
+            <EditText
+                android:id="@+id/edtDescripcionCompleta"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:background="#F8FAFC"
+                android:hint="Descripción completa"
+                android:minLines="3"
+                android:gravity="top"
+                android:padding="14dp" />
+
+            <EditText
+                android:id="@+id/edtHistoria"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:background="#F8FAFC"
+                android:hint="Historia, contexto o datos relevantes"
+                android:minLines="3"
+                android:gravity="top"
+                android:padding="14dp" />
+
+            <EditText
+                android:id="@+id/edtArtista"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:background="#F8FAFC"
+                android:hint="Artista o diseñador, si corresponde"
+                android:padding="14dp" />
+
+            <CheckBox
+                android:id="@+id/chkPropiedad"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:text="Declaro que el bien me pertenece y no posee impedimentos para ser subastado."
+                android:textColor="#334155"
+                android:textSize="14sp" />
+
+            <CheckBox
+                android:id="@+id/chkOrigenLicito"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Declaro que el origen del bien es lícito."
+                android:textColor="#334155"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/txtMensajeSolicitud"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:text=""
+                android:textAlignment="center"
+                android:textColor="#DC2626"
+                android:textSize="14sp" />
+
+            <Button
+                android:id="@+id/btnEnviarSolicitud"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:backgroundTint="#2563EB"
+                android:text="Enviar solicitud"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btnVolverSolicitud"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
+            android:backgroundTint="#E2E8F0"
+            android:text="Volver"
+            android:textColor="#0F172A"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+</ScrollView>

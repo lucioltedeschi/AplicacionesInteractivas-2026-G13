@@ -1,67 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#0A2647"
+    android:background="#1E3A8A"
+    android:gravity="center"
+    android:orientation="vertical"
     android:padding="32dp">
 
-    <LinearLayout
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:text="🔨"
+        android:textSize="64sp" />
 
-        <ImageView
-            android:id="@+id/imgGavel"
-            android:layout_width="265dp"
-            android:layout_height="150dp"
-            android:src="@drawable/logo"
-            app:tint="#C5A059" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:letterSpacing="0.1"
-            android:text="auct.io"
-            android:textColor="#FFFFFF"
-            android:textSize="40sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="bid your dreams"
-            android:textColor="#C5A059"
-            android:textSize="18sp"
-            android:layout_marginTop="4dp" />
-    </LinearLayout>
-
-    <LinearLayout
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:orientation="vertical"
-        android:layout_marginBottom="20dp">
+        android:layout_marginTop="18dp"
+        android:text="Auct.io"
+        android:textAlignment="center"
+        android:textColor="#FFFFFF"
+        android:textSize="38sp"
+        android:textStyle="bold" />
 
-        <Button
-            android:id="@+id/btnEnter"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:text="ENTER GALLERY"
-            android:backgroundTint="#C5A059"
-            android:textColor="#0A2647"
-            android:textStyle="bold" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Subastas online"
+        android:textAlignment="center"
+        android:textColor="#DBEAFE"
+        android:textSize="18sp" />
 
-        <Button
-            android:id="@+id/btnDiscover"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginTop="12dp"
-            android:text="DISCOVER THE COLLECTION"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:textColor="#FFFFFF"
-            app:strokeColor="#FFFFFF" />
-    </LinearLayout>
-</RelativeLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="34dp"
+        android:text="Cargando aplicación..."
+        android:textAlignment="center"
+        android:textColor="#BFDBFE"
+        android:textSize="15sp" />
+
+</LinearLayout>
